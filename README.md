@@ -1,2 +1,4 @@
 # PersonalVimiumHotkeys
-My personal Vimium hotkey config on my Brave installation.
+My personal Vimium hotkey config on a Brave installation.
+
+![Vimium ? Command](https://github.com/aidanjbailey/PersonalVimiumHotkeys/blob/master/Vimium.png)
