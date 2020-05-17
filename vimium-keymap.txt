@@ -24,10 +24,10 @@ map o Vomnibar.activate
 map O Vomnibar.activateInNewTab
 map T Vomnibar.activateTabSelection
 map / enterFindMode
-map w goForward
-map b goBack
-map N performFind
-map n performBackwardsFind
+map b goForward
+map B goBack
+map n performFind
+map N performBackwardsFind
 map t createTab
 map H previousTab
 map L nextTab
