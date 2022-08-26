@@ -1,3 +1,3 @@
-# Scripts and Configs
+# Scripts
 
-A collection of my personal scripts and configs.
+A collection of my personal scripts.
