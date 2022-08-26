@@ -6,5 +6,6 @@ A collection of my personal scripts.
 
 Manjaro i3 initialisation script.
 
-# i3-config
-i3 config file used in conjunction with Monjaro XFCE
+## i3\_init
+
+i3 config file used in conjunction with Monjaro XFCE.
