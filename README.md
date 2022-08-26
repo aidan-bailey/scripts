@@ -9,3 +9,6 @@ Manjaro i3 initialisation script.
 ## i3\_init
 
 i3 config file used in conjunction with Monjaro XFCE.
+
+## zshrc
+Generic ZSH Terminal Config
