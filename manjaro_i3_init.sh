@@ -185,7 +185,7 @@ echo "Setting up discord..."
 pinstall community/discord
 
 # SPOTIFY
-#echo "Setting up spotify..."
+echo "Setting up spotify..."
 pinstall spotify
 
 # Postgress
@@ -201,7 +201,7 @@ echo "Setting up emacs..."
 pinstall ripgrep fd
 if ! which emacs >> /dev/null 2> /dev/null ; then
 	cd /tmp
-	git clone git://git.savannah.gnu.org/emacs.git
+	git clone https://github.com/emacs-mirror/emacs.git
 	cd emacs
 	git checkout emacs-28
 	./autogen.sh
