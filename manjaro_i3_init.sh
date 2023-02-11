@@ -146,6 +146,10 @@ rustup component add rust-analyzer-preview
 # TOOLS #
 #########
 
+# THUNDERBIRD
+echo "Setting up thunderbird..."
+pinstall thunderbird
+
 # DBEAVER
 echo "Setting up dbeaver..."
 pinstall dbeaver
@@ -181,7 +185,7 @@ echo "Setting up discord..."
 pinstall community/discord
 
 # SPOTIFY
-#echo "Setting up spotify..."
+echo "Setting up spotify..."
 pinstall spotify
 
 # Postgress
