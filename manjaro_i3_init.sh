@@ -93,10 +93,6 @@ echo "Setting up browser..."
 pinstall brave-browser
 profile 'export BROWSER=/usr/bin/brave'
 
-# VSCODE
-echo "Setting up vscode..."
-pinstall visual-studio-code-bin
-
 #########
 # LANGS #
 #########
@@ -185,7 +181,7 @@ echo "Setting up discord..."
 pinstall community/discord
 
 # SPOTIFY
-echo "Setting up spotify..."
+#echo "Setting up spotify..."
 pinstall spotify
 
 # Postgress
@@ -217,3 +213,7 @@ if ! which doom >> /dev/null 2> /dev/null ; then
 	~/.emacs.d/bin/doom install $DOOMFLAGS
 	bashrc 'export PATH=$HOME/.emacs.d/bin:$PATH'
 fi
+
+# VSCODE
+echo "Setting up vscode..."
+pinstall visual-studio-code-bin
