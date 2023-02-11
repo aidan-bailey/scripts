@@ -7,7 +7,7 @@ USERNAME=$(id -u -n)
 
 # FLAGS
 MIRRORFLAGS='--geoip'
-PFLAGS='--noconfirm --needed --quiet --disable-download-timeout'
+PFLAGS='--noconfirm --needed --quiet --disable-download-timeout --norebuild --noredownload'
 EMACSFLAGS='--without-compress-install --with-native-compilation --with-json --with-pgtk'
 DOOMFLAGS='--config --env --install --fonts --hooks'
 
@@ -92,32 +92,6 @@ profile 'export EDITOR=/usr/bin/nvim'
 echo "Setting up browser..."
 pinstall brave-browser
 profile 'export BROWSER=/usr/bin/brave'
-
-########
-# IDEs #
-########
-
-# EMACS
-echo "Setting up emacs..."
-pinstall ripgrep fd
-if ! which emacs >> /dev/null 2> /dev/null ; then
-	cd /tmp
-	git clone git://git.savannah.gnu.org/emacs.git
-	cd emacs
-	git checkout emacs-28
-	./autogen.sh
-    	./configure $EMACSFLAGS
-    	make -j$(nproc)
-	sudo make install
-	cd --
-	cd --
-fi
-
-if ! which doom >> /dev/null 2> /dev/null ; then
-	git clone --depth 1 https://github.com/doomemacs/doomemacs ~/.emacs.d
-	~/.emacs.d/bin/doom install $DOOMFLAGS
-	bashrc 'export PATH=$HOME/.emacs.d/bin:$PATH'
-fi
 
 # VSCODE
 echo "Setting up vscode..."
@@ -204,7 +178,7 @@ pinstall slack-desktop
 
 # STEAM
 echo "Setting up steam..."
-pinstall steam-native
+pinstall steam-native-runtime
 
 # DISCORD
 echo "Setting up discord..."
@@ -217,3 +191,29 @@ pinstall spotify
 # Postgress
 echo "Setting up postgresql..."
 pinstall postgresql
+
+########
+# IDEs #
+########
+
+# EMACS
+echo "Setting up emacs..."
+pinstall ripgrep fd
+if ! which emacs >> /dev/null 2> /dev/null ; then
+	cd /tmp
+	git clone git://git.savannah.gnu.org/emacs.git
+	cd emacs
+	git checkout emacs-28
+	./autogen.sh
+    	./configure $EMACSFLAGS
+    	make -j$(nproc)
+	sudo make install
+	cd --
+	cd --
+fi
+
+if ! which doom >> /dev/null 2> /dev/null ; then
+	git clone --depth 1 https://github.com/doomemacs/doomemacs ~/.emacs.d
+	~/.emacs.d/bin/doom install $DOOMFLAGS
+	bashrc 'export PATH=$HOME/.emacs.d/bin:$PATH'
+fi
