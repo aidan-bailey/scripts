@@ -206,7 +206,7 @@ if ! which emacs >> /dev/null 2> /dev/null ; then
 	git checkout emacs-28
 	./autogen.sh
     	./configure "$EMACSFLAGS"
-    	make -j$(nproc)
+    	make -j"$(nproc)"
 	sudo make install
 	cd --
 	cd --
