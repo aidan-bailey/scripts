@@ -109,6 +109,10 @@ pinstall marked
 echo "Setting up scala..."
 pinstall scala scala-docs scala-sources
 
+# JAVA
+echo "Setting up java..."
+pinstall gradle
+
 # PYTHON
 echo "Setting up python..."
 pinstall python python-pip python-wheel twine pyenv pyright
