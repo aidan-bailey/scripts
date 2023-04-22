@@ -27,23 +27,23 @@ updatemirrors() {
 }
 
 pupgrade () {
-	yay -Syu "$PFLAGS"
+	yay -Syu $PFLAGS
 }
 
 pinstall () {
-	yay -S "$@" "$PFLAGS"
+	yay -S $@ $PFLAGS
 }
 
 bashrc () {
-	if ! grep -x "$1" "$BASHRCPATH" >> /dev/null; then
-		echo "$1" >> "$BASHRCPATH"
+	if ! grep -x "$1" $BASHRCPATH >> /dev/null; then
+		echo "$1" >> $BASHRCPATH
 	fi
 }
 
 profile () {
 
-	if ! grep -x "$1" "$PROFILEPATH" >> /dev/null; then
-		echo "$1" >> "$PROFILEPATH"
+	if ! grep -x "$1" $PROFILEPATH >> /dev/null; then
+		echo "$1" >> $PROFILEPATH
 	fi
 
 }
@@ -160,13 +160,13 @@ pinstall google-cloud-sdk
 
 # DOCKER
 echo "Setting up docker..."
-pinstall nvidia-container-toolkit
-pinstall docker
-sudo systemctl enable docker
-sudo systemctl start docker
-sudo systemctl enable containerd
-sudo systemctl start containerd
-sudo usermod -aG docker "$USERNAME"
+#pinstall nvidia-container-toolkit
+#pinstall docker
+#sudo systemctl enable docker
+#sudo systemctl start docker
+#sudo systemctl enable containerd
+#sudo systemctl start containerd
+#sudo usermod -aG docker $USERNAME
 
 # SLACK
 echo "Setting up slack..."
@@ -205,8 +205,8 @@ if ! which emacs >> /dev/null 2> /dev/null ; then
 	cd emacs
 	git checkout emacs-28
 	./autogen.sh
-    	./configure "$EMACSFLAGS"
-    	make -j"$(nproc)"
+    	./configure $EMACSFLAGS
+    	make -j$(nproc)
 	sudo make install
 	cd --
 	cd --
@@ -214,7 +214,7 @@ fi
 
 if ! which doom >> /dev/null 2> /dev/null ; then
 	git clone --depth 1 https://github.com/doomemacs/doomemacs ~/.emacs.d
-	~/.emacs.d/bin/doom install "$DOOMFLAGS"
+	~/.emacs.d/bin/doom install $DOOMFLAGS
 	bashrc 'export PATH=$HOME/.emacs.d/bin:$PATH'
 fi
 
