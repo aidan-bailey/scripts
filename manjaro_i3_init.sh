@@ -146,6 +146,10 @@ pinstall rustup cargo
 rustup default nightly
 rustup component add rust-analyzer-preview
 
+# C#
+echo "Setting up c#"
+pinstall dotnet-sdk mono omnisharp-roslyn
+
 #########
 # TOOLS #
 #########
