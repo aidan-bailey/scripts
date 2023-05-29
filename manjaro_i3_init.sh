@@ -138,7 +138,7 @@ julia -e 'using Pkg; Pkg.add("LanguageServer")'
 
 # HASKELL
 echo "Setting up haskell..."
-pinstall ghc ghc-libs ghc-static ghc-filesystem
+pinstall ghc ghc-libs ghc-static ghc-filesystem haskell-language-server
 
 # RUST
 echo "Setting up rust..."
