@@ -16,7 +16,7 @@ BASHRCPATH=$HOME/.zshrc
 PROFILEPATH=$HOME/.profile
 
 # VERSIONS
-PYVERSION=3.11.3
+PYVERSION=3.9.13
 
 #############
 # FUNCTIONS #
@@ -138,7 +138,7 @@ julia -e 'using Pkg; Pkg.add("LanguageServer")'
 
 # HASKELL
 echo "Setting up haskell..."
-pinstall ghc ghc-libs ghc-static ghc-filesystem haskell-language-server stack
+pinstall ghc ghc-libs ghc-static ghc-filesystem
 
 # RUST
 echo "Setting up rust..."
@@ -147,8 +147,13 @@ rustup default nightly
 rustup component add rust-analyzer-preview
 
 # C#
-echo "Setting up c#"
+echo "Setting up c#..."
 pinstall dotnet-sdk mono omnisharp-roslyn
+
+# GO
+echo "Setting up go..."
+pinstall go
+go install golang.org/x/tools/gopls@latest
 
 #########
 # TOOLS #
