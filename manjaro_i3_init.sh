@@ -1,5 +1,4 @@
 #!/bin/bash
-
 set -eo pipefail
 
 # VARS
@@ -14,24 +13,36 @@ DOOMFLAGS='--config --env --install --fonts --hooks'
 # PATHS
 BASHRCPATH=$HOME/.zshrc
 PROFILEPATH=$HOME/.profile
+i3CONFIGPATH=$HOME/.i3/config
 
 # VERSIONS
 PYVERSION=3.9.13
+
+STDOUT='manjaro_i3_setup.log'
+STDERR='manjaro_i3_setup.err'
+
+touch $STDOUT 
+touch $STDERR
 
 #############
 # FUNCTIONS #
 #############
 
+log() {
+	echo $@ >> $STDOUT 2>> $STDERR
+	echo "$@" 
+}
+
 updatemirrors() {
-	sudo pacman-mirrors $MIRRORFLAGS
+	sudo pacman-mirrors $MIRRORFLAGS >> $STDOUT 2>> $STDERR
 }
 
 pupgrade () {
-	yay -Syu $PFLAGS
+	yay -Syu $PFLAGS >> $STDOUT 2>> $STDERR
 }
 
 pinstall () {
-	yay -S $@ $PFLAGS
+	yay -S $@ $PFLAGS >> $STDOUT 2>> $STDERR
 }
 
 bashrc () {
@@ -52,9 +63,12 @@ profile () {
 # INIT #
 ########
 
+
 # Set mirrors
+log "Updating mirrors..."
 updatemirrors
 
+log "Checking Yay is installed..."
 # Yay Package Manager
 if ! which yay >> /dev/null; then
 	cd /tmp
@@ -66,10 +80,18 @@ if ! which yay >> /dev/null; then
 fi
 
 # Upgrade
+log "Upgrading system..."
 pupgrade
 
 # PulseAudio
-# install_pulse
+log "Setting up pulsaudio..."
+pinstall manjaro-pulse pa-applet-git pavucontrol
+msg "writing configuration"
+sed -i 's/exec --no-startup-id volumeicon/#exec --no-startup-id volumeicon/g' $i3CONFIGPATH
+sed -i 's/bindsym \$mod+Ctrl+m exec terminal -e '\''alsamixer'\''/#bindsym \$mod+Ctrl+m exec terminal -e '\''alsamixer'\''/g' $i3CONFIGPATH
+sed -i 's/#exec --no-startup-id pulseaudio/exec --no-startup-id start-pulseaudio-x11/g' $i3CONFIGPATH
+sed -i 's/#exec --no-startup-id pa-applet/exec --no-startup-id pa-applet/g' $i3CONFIGPATH
+sed -i 's/#bindsym \$mod+Ctrl+m exec pavucontrol/bindsym \$mod+Ctrl+m exec pavucontrol/g' $i3CONFIGPATH
 
 # SwapEscape
 bashrc 'setxkbmap -option caps:swapescape'
@@ -84,13 +106,13 @@ profile 'export SHELL=/usr/bin/zsh'
 #######
 
 # TERMINAL EDITOR
-echo "Setting up terminal editor..."
+log "Setting up terminal editor..."
 pinstall neovim
 profile 'export EDITOR=/usr/bin/nvim'
 
 # BROWSER
-echo "Setting up browser..."
-pinstall brave-browser
+log "Setting up browser..."
+pinstall sidekick-browser-stable-bin
 profile 'export BROWSER=/usr/bin/brave'
 
 #########
@@ -98,81 +120,95 @@ profile 'export BROWSER=/usr/bin/brave'
 #########
 
 # SHELL
-echo "Setting up shell..."
+log "Setting up shell..."
 pinstall shfmt aspell-en
 
 # MARKDOWN
-echo "Setting up markdown..."
+log "Setting up markdown..."
 pinstall marked
 
 # SCALA
-echo "Setting up scala..."
+log "Setting up scala..."
 pinstall scala scala-docs scala-sources
 
 # JAVA
-echo "Setting up java..."
+log "Setting up java..."
 pinstall gradle
 
 # PYTHON
-echo "Setting up python..."
-pinstall python python-pip python-wheel twine pyenv pyright
+log "Setting up python..."
+pinstall python tk python-pip python-wheel twine pyenv pyright
 bashrc 'export PATH=$HOME/.pyenv/bin:$PATH'
 bashrc 'eval "$(pyenv init -)"'
 pyenv install $PYVERSION --skip-existing
 pyenv global $PYVERSION
-pip3 install --upgrade pip
-pip3 install wheel pyflakes isort pipenv pytest pysort black neovim
+#pip3 install --upgrade pip # Can no longer install into global python environment
+pinstall install python-wheel python-pyflakes python-isort python-pipenv python-pytest python-pysort python-black python-neovim
 
 # C++
-echo "Setting up c++..."
+log "Setting up c++..."
 pinstall cmake
 
 # JAVASCRIPT
-echo "Setting up javascript..."
+log "Setting up javascript..."
 pinstall nodejs npm
 
 # JULIA
-echo "Setting up julia..."
+log "Setting up julia..."
 pinstall julia
 julia -e 'using Pkg; Pkg.add("LanguageServer")'
 
 # HASKELL
-echo "Setting up haskell..."
+log "Setting up haskell..."
 pinstall ghc ghc-libs ghc-static ghc-filesystem
 
 # RUST
-echo "Setting up rust..."
+log "Setting up rust..."
 pinstall rustup cargo 
+log "installing nightly..."
 rustup default nightly
+log "installing analyzer and composer..."
 rustup component add rust-analyzer-preview
 
 # C#
-echo "Setting up c#..."
+log "Setting up c#..."
 pinstall dotnet-sdk mono omnisharp-roslyn
 
 # GO
-echo "Setting up go..."
+log "Setting up go..."
 pinstall go
 go install golang.org/x/tools/gopls@latest
+
+# Latex
+log "Setting up latex..."
+pinstall texlive-full
 
 #########
 # TOOLS #
 #########
 
+# Bitwarden
+log "Setting up Bitwarden..."
+pinstall bitwarden
+
+# Feh
+log "Setting up Feh..."
+pinstall feh
+
 # THUNDERBIRD
-echo "Setting up thunderbird..."
+log "Setting up thunderbird..."
 pinstall thunderbird
 
 # DBEAVER
-echo "Setting up dbeaver..."
+log "Setting up dbeaver..."
 pinstall dbeaver
 
 # GCLOUD
-echo "Setting up gcloud..."
+log "Setting up gcloud..."
 pinstall google-cloud-sdk
 
 # DOCKER
-echo "Setting up docker..."
+#log "Setting up docker..."
 #pinstall nvidia-container-toolkit
 #pinstall docker
 #sudo systemctl enable docker
@@ -182,35 +218,57 @@ echo "Setting up docker..."
 #sudo usermod -aG docker $USERNAME
 
 # SLACK
-echo "Setting up slack..."
+log "Setting up slack..."
 pinstall slack-desktop
+
+# TeamViewer
+log "Setting up teamviewer..."
+pinstall teamviewer
 
 ################
 # APPLICATIONS #
 ################
 
 # STEAM
-echo "Setting up steam..."
+log "Setting up steam..."
 pinstall steam-native-runtime
 
 # DISCORD
-echo "Setting up discord..."
-pinstall community/discord
+log "Setting up discord..."
+pinstall discord
 
 # SPOTIFY
-#echo "Setting up spotify..."
+log "Setting up spotify..."
 pinstall spotify
 
 # Postgress
-echo "Setting up postgresql..."
+log "Setting up postgresql..."
 pinstall postgresql
+
+# Zotero
+log "Setting up zotero..."
+pinstall zotero
+
+# QEMU
+log "Setting up QEMU..."
+pinstall qemu-full qemu-img libvirt virt-install virt-manager virt-viewer \ edk2-ovmf swtpm guestfs-tools libosinfo tuned
+sudo systemctl enable libvirtd.service 
+sudo virt-host-validate qemu 
+
+# Remmina
+log "Setting up Remmina..."
+pinstall remmina freerdp
+
+# Texstudio
+log "Setting up TexStudio..."
+pinstall texstudio
 
 ########
 # IDEs #
 ########
 
 # EMACS
-echo "Setting up emacs..."
+log "Setting up emacs..."
 pinstall ripgrep fd libgccjit
 if ! which emacs >> /dev/null 2> /dev/null ; then
 	cd /tmp
@@ -232,5 +290,5 @@ if ! which doom >> /dev/null 2> /dev/null ; then
 fi
 
 # VSCODE
-echo "Setting up vscode..."
+log "Setting up vscode..."
 pinstall visual-studio-code-bin
