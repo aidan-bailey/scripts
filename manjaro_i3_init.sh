@@ -208,7 +208,7 @@ log "Setting up gcloud..."
 pinstall google-cloud-sdk
 
 # DOCKER
-#log "Setting up docker..."
+log "Setting up docker..."
 #pinstall nvidia-container-toolkit
 #pinstall docker
 #sudo systemctl enable docker
